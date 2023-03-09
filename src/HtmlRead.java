@@ -144,35 +144,40 @@ class HtmlRead implements ActionListener {
                             new InputStreamReader(url.openStream())
                     );
                     String line;
-                    while ( (line = reader.readLine()) != null ) {
-                        if(line.contains("href")&&line.contains(tb.getText())&&line.contains("http")){
-                            System.out.println( "og: "+line);
+                    while ((line = reader.readLine()) != null) {
+                        System.out.println("og: " + line);
+
+                        if (line.contains("href") && line.contains(tb.getText())) {
+                            System.out.println("og: " + line);
 
                             int index = line.indexOf("href");
                             line = line.substring(index + 6);
-                            int endD = line.indexOf("\"");
-                            int endS = line.indexOf("\'");
-                            int end = 0;
-                            if(endD==-1){
-                                  end = endS;
-                            }
-                            if(endS==-1){
-                                end = endD;
-                            }
-                            if(endD != -1 && endS != -1){
-                                if(endD > endS){
+                            if (line.contains("http")) {
+                                index = line.indexOf("http");
+                                line = line.substring(index);
+                                int endD = line.indexOf("\"");
+                                int endS = line.indexOf("\'");
+                                int end = 0;
+                                if (endD == -1) {
                                     end = endS;
                                 }
-                                else{
+                                if (endS == -1) {
                                     end = endD;
-
                                 }
+                                if (endD != -1 && endS != -1) {
+                                    if (endD > endS) {
+                                        end = endS;
+                                    } else {
+                                        end = endD;
+
+                                    }
+                                }
+
+
+                                System.out.println(line.substring(0, end));
+                                statusLabel.append(line.substring(0, end) + "\n");
                             }
-
-                            System.out.println(line.substring(0, end));
-                            statusLabel.append(line.substring(0, end)+"\n");
                         }
-
 
                     }
                     reader.close();
